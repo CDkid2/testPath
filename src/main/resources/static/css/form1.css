@@ -1,0 +1,211 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard-Regular';
+}
+
+/* 스크롤바 설정*/
+*::-webkit-scrollbar{
+    width: 10px;
+}
+
+/* 스크롤바 막대 설정*/
+*::-webkit-scrollbar-thumb{
+    background-color: gainsboro;
+    /* 스크롤바 둥글게 설정    */
+    border-radius: 5px;
+    border-style: hidden;
+}
+
+header {
+    padding-bottom: 5px;
+    border-style: hidden;
+    border-width: 0 0 1px 0;
+    box-shadow: 0 4px 4px -4px lightgray;
+}
+
+.search {
+    position: relative;
+    width: 300px;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.search input {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.search-btn {
+    position : absolute;
+    width: 17px;
+    top: 10px;
+    right: 12px;
+    margin: 0;
+}
+
+#kakao-talk-channel-chat-button {
+    position: fixed;
+    bottom: 40px; /* Adjust this value as needed */
+    right: 100px; /* Adjust this value as needed */
+
+}
+
+/* 고정된 하단 버튼 스타일 */
+.fixed-bottom-btn {
+    position: fixed;
+    bottom: 45px;
+    right: 223px;
+    z-index: 1000;
+}
+
+.top-btn {
+    background: transparent;
+    border: none;
+}
+.top-btn:focus {
+    outline: none;
+}
+
+
+/* 추가된 스타일 */
+.fixed-bottom-btn-container {
+    position: fixed;
+    bottom: 70px;
+    left: 20px; /* 좌측 정렬을 위해 수정 */
+    display: flex;
+    flex-direction: column; /* 버튼들을 가로로 정렬 */
+    gap: 10px;
+}
+
+.fixed-bottom-btn-container .btn.btn-primary {
+    padding: 8px 10px; /* 원하는 패딩으로 조절 */
+}
+
+
+/* 맨 위로 이동 버튼의 스타일 */
+#backToTopBtn {
+    order: 1; /* 순서를 조정하여 톡상담 버튼 위에 위치시킴 */
+    margin-left: 10px;
+    border-style: none;
+    background: none;
+}
+
+
+.navbar {
+    margin-left: 200px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-nav {
+    margin-right: 200px;
+    margin-top: 15px;
+}
+
+.container h1 {
+    color: #2D2F33;
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.container h2 {
+    color: #007BFF;
+    font-size: 2em;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.container h3 {
+    color: #333333;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+}
+
+.container a {
+    color: #007BFF;
+}
+
+.container a:hover {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.fixed-bottom-btn-container {
+    position: fixed;
+    bottom: 100px;
+    right: 100px;
+    z-index: 1000;
+}
+
+#kakao-talk-channel-chat-button {
+    margin-right: 10px;
+}
+
+.modal-dialog {
+    display: flex;
+    justify-content: center;
+}
+
+.modal-content {
+    font-size: 0.9em;
+    font-family: 'Pretendard-Regular';
+    height: 500px;
+}
+
+#contactEmail, #contactMessage {
+    border: 1px solid #cccccc;
+}
+
+.container .row .col-md-12 h3 {
+    color: #007BFF;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.0);
+    margin-bottom: 10px;
+}
+
+.container .row .col-md-12 div a {
+    display: block;
+    color: #333333;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.container .row .col-md-12 div a:hover::before {
+    width: 100%;
+}
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: auto;
+    background-color: #f1f1f1; /* Adjust the background color as needed */
+    padding: 10px;
+    color: lightslategray;
+}
+
+.footer-info {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 12px;
+}

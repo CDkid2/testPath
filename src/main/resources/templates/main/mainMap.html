@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>메인페이지</title>
+    <link rel="stylesheet" href="/css/mainMap.css">
+    <link rel="stylesheet" href="/css/mainMap_popup.css">
+
+</head>
+<body>
+<div class="div-30">
+    <div id="list-header">
+        <a class="navbar-brand" href="/">
+            <img th:src="@{/img/pp로고.png}" alt="Logo" width="120px" height="80px" class="d-inline-block align-top">
+        </a>
+        <h1 th:each="destination, stat : ${destinations}" th:if="${stat.index == 0}" th:text= "${destination.desClsCode.getDesAddr()}"></h1>
+    </div>
+    <div>
+        <input type="text" id="search-input" placeholder="여행지 검색" style="height: 35px;width: 370px; border-radius: 10px"/>
+        <button id="search-button">검색</button>
+        <div id="autocomplete-results"></div>
+    </div>
+
+    <div id="list-items">
+        <ul id="coordList" th:each="destination : ${destinations}" >
+            <li th:attr="data-lat=${destination.getDesLat()}, data-lng=${destination.getDesLng()}, data-level=8 " >
+                <div th:each="image : ${destination.images}">
+                    <img class="image" th:src="${image.imgCode}" alt="Image">
+                </div>
+                <div class="title" th:text="${destination.getDesName()}" style="font-size: 25px; text-align: center"></div>
+                <div class="title" th:text="${destination.getDesAddr()}" style="font-size: 14px; text-align: end"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 여기에 내용 작성 -->
+
+<div class="div-70">
+    <div id="map">
+        <!-- 로그인 버튼 -->
+        <button class="button login-button"  onclick="login()">로그인</button>
+
+        <!-- 고객지원 버튼 -->
+        <button class="button support-button" onclick="openSupportChannel()">고객지원</button>
+
+    </div>
+
+    <div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"  th:each="destination : ${destinations}">
+        <div class="modal-dialog" role="document" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="exampleModalLabel" th:text="${destination.getDesName()}" style="text-align: left"></h3>
+                    <h6 th:each="destination, stat : ${destinations}" th:if="${stat.index == 0}" th:text= "${destination.desClsCode.getDesAddr()}" style="text-align: right"></h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div th:each="image : ${destination.images}">
+                        <img class="modal_image" th:src="${image.imgCode}" alt="Image" style=" width: 100%; height: 300px" >
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center; margin-top: 5px">
+                    <a class="nav-link" th:href="@{'/destinations/detail'(keyword=${destination.desName})}" style="text-decoration: none; color: #2d2f33; border-style: solid; border-radius: 20px">상세</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="kakao-talk-channel-chat-button" data-channel-public-id="_rBEwG" data-title="consult" data-size="small" data-color="yellow" data-shape="pc" data-support-multiple-densities="true"></div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f22d4467b66f1f745948316c436ffe69"></script>
+<script>
+    var map = new kakao.maps.Map(document.getElementById('map'), {
+        center: new kakao.maps.LatLng(37.5665, 126.9780),
+        level: 10
+    });
+
+    var markers = []; // 마커를 저장할 배열
+    var selectedCoords = null; // 현재 선택된 좌표 저장 변수
+
+    var coordListItems = document.querySelectorAll('#coordList li');
+
+    coordListItems.forEach(function(listItem) {
+        listItem.addEventListener('click', function (e) {
+            e.stopPropagation(); // 이벤트 전파 막기
+
+            var lat = parseFloat(listItem.getAttribute('data-lat'));
+            var lng = parseFloat(listItem.getAttribute('data-lng'));
+            var level = parseInt(listItem.getAttribute('data-level')) || 10; // 기본값 10
+            var desName = listItem.querySelector('.title').textContent; // desName 가져오기
+            var desAddr = listItem.querySelector('.title').nextElementSibling.textContent; // desAddr 가져오기
+            var imageUrl = listItem.querySelector('.image').src; // 이미지 URL 가져오기
+
+            window.history.pushState({}, null, '/destinations/search?keyword=' + encodeURIComponent(desName));
+
+
+            // 페이지 내 특정 엘리먼트 내용 변경
+            var keywordElement = document.querySelector('#keyword'); // id가 'keyword'인 엘리먼트 선택
+            if (keywordElement) {
+                keywordElement.textContent = desName; // 선택된 엘리먼트의 내용을 desName으로 변경
+            }
+            var coords = new kakao.maps.LatLng(lat, lng);
+
+            // 모달창 내용 변경
+            var modalTitle = document.querySelector('#popup .modal-title'); // 모달창의 title 선택
+            if (modalTitle) {
+                modalTitle.textContent = desName; // title 업데이트
+            }
+
+            var modalAddr = document.querySelector('#popup h6'); // 모달창의 h6 선택
+            if (modalAddr) {
+                modalAddr.textContent = desAddr; // 주소 업데이트
+            }
+
+            var modalImage = document.querySelector('#popup .modal_image'); // 모달창의 이미지 선택
+            if (modalImage) {
+                modalImage.src = imageUrl; // 이미지 업데이트
+            }
+
+            // 모달창 다시 열기
+            $('#popup').modal('show');
+
+
+            // 모달 요소 선택
+            var modal = document.querySelector('#popup');
+
+            // 모달 외부 클릭 이벤트 리스너 추가
+            window.onclick = function(event) {
+                // 클릭한 요소가 모달이 아니고 리스트 항목도 아닌 경우
+                if (event.target != modal && !event.target.closest('#coordList li')) {
+                    // 모달 닫기
+                    $('#popup').modal('hide');
+                }
+            }
+
+
+            // 현재 선택된 좌표와 비교하여 같으면 마커 삭제
+            if (selectedCoords && selectedCoords.equals(coords)) {
+                deleteMarkers();
+                selectedCoords = null;
+            } else {
+                // 기존 마커 삭제
+                deleteMarkers();
+
+                // 지도 이동 및 확대 수준 조절
+                map.setLevel(level);
+                map.setCenter(coords);
+
+                // 새로운 마커 추가
+                var marker = new kakao.maps.Marker({
+                    position: coords,
+                    map: map
+                });
+
+                // 마커 배열에 추가
+                markers.push(marker);
+                selectedCoords = coords;
+            }
+        });
+    });
+    $('#popup').on('shown.bs.modal', function (e) {
+        // '상세' 버튼
+        var detailButton = document.querySelector('#popup .modal-footer .nav-link');
+
+        // 이전에 추가한 클릭 이벤트 핸들러 제거
+        detailButton.removeEventListener('click', detailButtonClickHandler);
+
+        // 클릭 이벤트 핸들러 추가
+        detailButton.addEventListener('click', detailButtonClickHandler);
+    });
+    function detailButtonClickHandler(e) {
+        e.stopPropagation(); // 이벤트 전파 막기
+
+        // 현재 선택된 항목의 desName 가져오기
+        var desName = document.querySelector('#popup .modal-title').textContent;
+
+        // 페이지 이동
+        var url = '/destinations/detail?keyword=' + encodeURIComponent(desName);
+        window.location.href = url;
+
+        // 'li' 요소의 클릭 이벤트 핸들러가 동작하지 않도록 이벤트 버블링 막기
+        e.preventDefault();
+    }
+
+    var detailButtons = document.querySelectorAll('.modal-footer .nav-link');
+
+    detailButtons.forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            e.stopPropagation(); // 이벤트 전파 막기
+
+            // 현재 선택된 항목의 desName 가져오기
+            var desName = button.closest('.modal-content').querySelector('.modal-title').textContent;
+
+            // 페이지 이동
+            var url = '/destinations/detail?keyword=' + encodeURIComponent(desName);
+            window.location.href = url;
+
+            // 'li' 요소의 클릭 이벤트 핸들러가 동작하지 않도록 이벤트 버블링 막기
+            e.preventDefault();
+        });
+    });
+
+
+    // 좌표로 지도 이동하는 함수
+    function moveToLocation(lat, lng, title) {
+        var coords = new kakao.maps.LatLng(lat, lng);
+
+
+        // 기존 마커 삭제
+        deleteMarkers();
+
+        // 지도 이동
+        map.setLevel(4); // 기본 level 설정
+        map.setCenter(coords);
+
+        // 새로운 마커 추가
+        var marker = new kakao.maps.Marker({
+            position: coords,
+            map: map,
+            title: title
+        });
+
+        // 마커 배열에 추가
+        markers.push(marker);
+        selectedCoords = coords;
+    }
+
+    // 모든 마커 삭제 함수
+    function deleteMarkers() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        markers = [];
+    }
+
+    $(document).ready(function() {
+        function doSearch() {
+            var keyword = $('#search-input').val();
+            if (keyword.length >= 1) {  // 키워드가 2글자 이상일 때만 요청
+                fetch('/destinations/autocomplete?keyword=' + encodeURIComponent(keyword))
+                    .then(response => response.json())
+                    .then(data => {
+                        var html = '';
+                        for (var i = 0; i < data.length; i++) {
+                            html += '<div>' + data[i].desName + '</div>';  // 결과의 desName을 표시
+                        }
+                        $('#autocomplete-results').html(html);
+                    });
+            } else {
+                $('#autocomplete-results').empty();  // 키워드가 짧으면 결과를 지움
+            }
+        }
+
+        $('#search-input').on('input', doSearch);  // 입력이 변경될 때마다 검색
+        $('#search-button').on('click', doSearch);  // 검색 버튼 클릭 시 검색
+
+        $('#search-input').on('keypress', function(e) {
+            if (e.which == 13) {  // 엔터 키 입력 시
+                window.location.href = '/destinations/search?keyword=' + encodeURIComponent($(this).val());
+                return false;  // 기본 동작(폼 제출 등)을 막음
+            }
+        });
+        $('#autocomplete-results').on('click', 'div', function() {
+            window.location.href = '/destinations/search?keyword=' + encodeURIComponent($(this).text());
+        });
+    });
+</script>
+</body>
+</html>

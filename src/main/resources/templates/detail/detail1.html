@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+<!--    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">-->
+
+
+
+    <title>상세페이지</title>
+    <link rel="stylesheet" th:href="@{/css/detail.css}">
+    <link rel="stylesheet" th:href="@{/css/modal.css}">
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <form class="form-inline my-2 my-lg-0">
+            <a href="/index.html">
+                <img th:src="@{/img/pp로고.png}" alt="" style="width: 150px; margin-top: 15px; margin-left: 50px;">
+            </a>
+        </form>
+        <!-- 오른쪽 링크들 -->
+        <ul class="navbar-nav ml-auto" id="my-login-align">
+            <li class="nav-item">
+                <a class="nav-link" href="/aboutus/aboutus">고객 지원</a>
+            </li>
+            <!-- 로그인 상태인 경우 프로필 이미지와 드롭다운 메뉴 표시 -->
+
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()" > <!---->
+                <li th:each="user, stat : ${users}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                        <img th:src="${user.profileImg}"  alt="프로필 이미지"
+                             class="profile-image" style="width: 30px; border-radius: 70%;"/>
+                         <!--src="https://image.idus.com/image/files/ddd9ac8dd08343f1819fb9aecd5676fe_1440.jpg"-->
+                    </a>
+                </li>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/mypage">마이페이지</a>
+                    <a class="dropdown-item" href="/logout">로그아웃</a>
+                </div>
+            </li>
+
+            <!-- 로그인 상태가 아닌 경우 로그인 링크 표시 -->
+            <li class="nav-item" sec:authorize="!isAuthenticated()"> <!---->
+                <a class="nav-link" href="/login">로그인</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<section>
+    <div class="content">
+        <article class="main-frame">
+            <div class="container" th:each="destination : ${destinations[0]}" style="max-width:1200px;"> <!--th:each="destination : ${destinations[0]}" -->
+                <div class="desTitle">
+                    <h2 th:text="${destination.desName}" style="font-weight:bold; font-size:4em; margin-top: 0;" ></h2> <!--th:text="${destination.desName}"-->
+                </div>
+                <div><hr></div>
+
+                <div class="desImage">
+                    <div>
+                        <div th:each="image : ${destination.images}">  <!--th:each="image : ${destination.images}"-->
+                            <a class="click-img-link" id="modalClick" style="cursor: pointer;">
+                                <img class="click-img" role="button" style="width:100%; margin-top: 20px;"  alt="여행지 메인 이미지"
+                                     th:src="${image.imgCode}" />
+                            </a>
+                            <h2 style="margin-top: 10px; font-size: 2em;"> 여행지 설명 </h2>
+                            <h3 th:text="${destination.desCont}"> destination.cont </h3>         <!--th:text="${destination.desCont}-->
+                        </div>
+                    </div>
+                    <!-- 모달 요소 -->
+                    <div id="imageModal" class="modal" >
+                        <span class="close">&times;</span>
+                        <img class="modal-content" id="modalImage"/>
+                    </div>
+                </div>
+
+                <div> <hr> </div>
+                <div class="reviewContainer">
+                    <div class="reviewStar"></div>
+                    <div class="reviewNumber">
+                        <div class="reviewNum" >후기 &nbsp; 후기 개수 </div>
+                    </div>
+                    <div th:each = "review : ${destination.reviews}" style="margin-top: 20px;"> <!--th:each = "review : ${destination.reviews}"-->
+                         <!--th:text = "${review.rvTitle}"-->
+                        <div id="rv_arrange" style="display: flex;">
+                            <p style="font-size: 1.2em; margin-right: 20px; font-weight: bolder; " th:text = "${review.rvTitle}">{REVIEW.RV_Title}
+                            <p> 여행객 &nbsp; </p>
+                            <p th:text = "${review.userEmail.nn}"> &nbsp; {userNickname}</p> &nbsp; &nbsp;<!--th:text = "${review.userEmail.nn}"-->
+                            <p th:text = "${review.rvDate}">{REVIEW.RV_Date}</p> <!--th:text = "${review.rvDate}"-->
+                            </p>
+                        </div>
+
+
+                        <div class="regiDate"></div>
+                        <div class="reviewContent">
+                            <div class="regiContent" style="margin: 10px 0 5px 0;">
+                                <div class="reviewText">
+                                    <p th:text = "${review.rvCont}" style="margin-right: 20px; text-align: justify; "> <!--th:text = "${review.rvCont}"-->
+                                        ${REVIEW.RV_CONT}
+                                    </p>
+                                </div>
+                                <div class="popImages" th:each="image, iterStat : ${review.images}" th:classappend="${iterStat.index} == 0 ? 'carousel-item active':'carousel-item'">
+                                    <a class="click-review-image">
+                                        <img th:src="${image.imgCode}" class="click-review-img" style="width:125px; height: 85px; cursor: pointer;" alt="후기이미지"/>
+                                    </a>
+                                    <!-- 모달 요소 -->
+                                    <div>
+                                        <div class="carousel-container">
+                                            <span class="close2">&times;</span>
+                                            <a style="cursor: pointer;" class="modal2" id="reviewModal">
+                                                <img class="modal-review-image" id="modalReviewImage" role="button" alt="후기 이미지"/>
+                                            </a>
+                                        </div>
+                                        <div class="carousel-controls">
+                                            <a type="button" class="prev-button"> < </a>
+                                            <a type="button" class="next-button"> > </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div> <hr> </div>
+                        </div>
+                    </div>
+
+                    <div> 후기 이미지 모음 </div>
+                    <div class="swiper-container" >
+                        <div class="swiper-wrapper" >
+                            <div class="swiper-slide" th:each = "review : ${destination.reviews}"> <!--th:each = "review : ${destination.reviews}"-->
+                                <a th:each = "images : ${review.images}"> <!--th:each = "images : ${review.images}"-->
+                                    <img th:src="${images.imgCode}" class="slide-img"  style="width: 200px; height: 150px" alt="1"> <!--th:src="${images.imgCode}"-->
+                                </a>
+                            </div>
+                        </div>
+                        <div class="swBt-container">
+                            <div class="swiper-button-prev"></div>
+                            <div class="swiper-button-next"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <div class="between-void"></div>
+        <aside class="buttonBox">
+            <div class="listContainer">
+                <div class=listBox>
+                    <label>
+                        <img th:src="@{/img/review.png}" id="goReview" width=20% alt="저장아이콘" type="button"/> <!--   -->
+                        &nbsp &nbsp &nbsp 리뷰 작성하기
+                    </label>
+                </div>
+                <div class="listBox" id="DetailBox">
+                    <label for="detailLink" style="cursor: pointer;">
+                        <img id="detailLink" th:src="@{/img/review.png}" width="20%" alt="저장아이콘" type="button"/>
+                        &nbsp;&nbsp;&nbsp;추천여행지 보기
+                    </label>
+                </div>
+                <div class="listBox" >
+                    <form th:action="@{/toggle}" th:method="post">
+                        <label for="detailLink" style="cursor: pointer;" th:data-desname = "${desName}" >
+                            <img id="filled-heart" class="saveMyBook" th:src="@{/img/Filledheart.png}" width="20%" alt="저장아이콘" role="button"/>
+                            <img id="line-heart" class="removeMyBook" th:src="@{/img/lineHeart.png}" width="20%" alt="저장아이콘" role="button"/>
+                            &nbsp;&nbsp;&nbsp; 나의 버킷리스트
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<footer>
+    <p class="footer-info">
+        상호명 Pathport <br>
+        주소 서울특별시 서초구 서초대로77길 54 (서초더블유타워 13,14층) <br>
+        제휴 문의 partnership@pathport.com <br>
+        저희는 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 상품·거래정보 및 거래에 대하여 책임을 지지않습니다.
+    </p>
+    <p class="footer-info">
+        <strong>고객지원 운영안내</strong><br>
+        채팅 상담 평일 10:00-17:00 <br>
+        유선 상담 평일 11:00-14:00 <br>
+        (점심시간 12:00-13:00) <br>
+        유선상담 0000-0000
+    </p>
+</footer>
+
+<script src="/js/kakaoc_hannel.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.6.1.slim.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>-->
+<script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>-->
+
+<script>
+    window.kakaoAsyncInit = function() {
+        Kakao.Channel.createChatButton({
+            container: '#kakao-talk-channel-chat-button',
+        });
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.channel.min.js';
+        js.integrity = 'sha384-ty4605mXDCz/lA+RRt4bHCRa1c9uIaIi0JrsmmWVxaNJZzu58jMhJK8wAMqDxrYv';
+        js.crossOrigin = 'anonymous';
+        fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'kakao-js-sdk');
+
+    // 이미지 후기 모음 슬라이더
+    document.addEventListener('DOMContentLoaded', function () {
+        // Swiper 초기화 및 옵션 설정
+        let mySwiper = new Swiper('.swiper-container', {
+            effect: 'slide',
+            slidesPerView: 3,
+            slidesPerGroup: 1,
+            spaceBetween: 30,
+            // centeredSlides: true,
+            // loop: true,
+            // autoplay: {
+            //     delay: 3000,
+            //     disableOnInteraction: false,
+            // },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+    });
+
+    // 이미지 클릭시 모달창 띄우기
+    var modal = document.getElementById('imageModal');
+    var modalImg = document.getElementById("modalImage");
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // 이미지 클릭시 모달창 열기
+        var imgLinks = document.querySelectorAll('.click-img-link');
+        imgLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                modal.style.display = "block";
+                modalImg.src = this.querySelector('.click-img').src;
+                // 모달이 열리면 슬라이더 버튼도 표시되도록 처리합니다.
+                // document.querySelector('.carousel-controls').style.display = 'block';
+                document.querySelector('.close').style.display='block';
+            });
+        });
+
+        // 모달창 닫기
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+            document.querySelector('.close').style.display='none';
+        }
+
+        // 모달 영역 외부 클릭 시 모달창 닫기
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    });
+
+    var reviewModal = document.getElementById('reviewModal');
+    var reviewImage = document.getElementById('modalReviewImage');
+
+    // 후기에 있는 이미지 클릭시 모달창 띄우기2
+    document.addEventListener('DOMContentLoaded', function () {
+        // 이미지 클릭시 모달창 열기
+        document.querySelectorAll('.click-review-image').forEach(function (element) {
+            element.addEventListener('click', function () {
+                var reviewModal = this.closest('.popImages').querySelector('.modal2');
+                var reviewImage = reviewModal.querySelector('.modal-review-image');
+                reviewModal.style.display = "block";
+                reviewImage.src = this.querySelector('.click-review-img').src;
+                document.querySelector('.carousel-controls').style.display = 'block';
+                document.querySelector('.close2').style.display = 'block';
+                // 케러셀 업데이트
+                updateCarouselItem();
+            });
+        });
+
+        // prev 버튼 이벤트 핸들러
+        document.querySelectorAll(".prev-button").forEach(function (button) {
+            button.addEventListener("click", function () {
+                // 이전 이미지로 이동하는 코드 작성
+            });
+        });
+
+        // next 버튼 이벤트 핸들러
+        document.querySelectorAll(".next-button").forEach(function (button) {
+            button.addEventListener("click", function () {
+                // 다음 이미지로 이동하는 코드 작성
+            });
+        });
+
+        // 모달창 닫기 버튼 이벤트 핸들러
+        document.querySelectorAll('.close2').forEach(function (button) {
+            button.addEventListener('click', function () {
+                var reviewModal = this.closest('.popImages').querySelector('.modal2');
+                reviewModal.style.display = "none";
+                // 모달이 닫히면 슬라이더 버튼도 숨깁니다.
+                document.querySelector('.carousel-controls').style.display = 'none';
+                document.querySelector('.close2').style.display = 'none';
+            });
+        });
+
+        // 모달창 닫기
+        var closeButtons = document.querySelectorAll('.close2');
+        closeButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                reviewModal.style.display = "none";
+                // 모달이 닫히면 슬라이더 버튼도 숨깁니다.
+                document.querySelector('.carousel-controls').style.display = 'none';
+                document.querySelector('.close2').style.display = 'none';
+            });
+        });
+
+        // 모달 영역 외부 클릭 시 모달창 닫기
+        window.addEventListener('click', function (event) {
+            if (event.target.classList.contains('modal2')) {
+                reviewModal.style.display = "none";
+                // 모달이 닫히면 슬라이더 버튼도 숨깁니다.
+                document.querySelector('.carousel-controls').style.display = 'none';
+                document.querySelector('.close2').style.display = 'none';
+            }
+        });
+
+        // carousel-item 클래스를 추가하거나 제거하는 함수
+        function updateCarouselItem() {
+            // 모든 이미지를 선택
+            var images = document.querySelectorAll(".popImages .click-review-image");
+            // 현재 활성화된 이미지의 인덱스를 구함
+            var activeIndex = -1;
+            for (var i = 0; i < images.length; i++) {
+                if (images[i].parentElement.classList.contains("carousel-item")) {
+                    activeIndex = i;
+                    break;
+                }
+            }
+            // 현재 활성화된 이미지가 없으면 첫 번째 이미지를 활성화
+            if (activeIndex == -1) {
+                images[0].parentElement.classList.add("carousel-item");
+                activeIndex = 0;
+            }
+
+            // 이전 버튼을 누르면 현재 활성화된 이미지의 이전 이미지를 활성화
+            document.querySelector(".prev-button").addEventListener("click", function () {
+                // 현재 활성화된 이미지의 클래스를 제거
+                images[activeIndex].parentElement.classList.remove("carousel-item");
+                // 이전 이미지의 인덱스를 구함
+                var prevIndex = activeIndex - 1;
+                // 인덱스가 범위를 벗어나면 마지막 이미지로 돌아감
+                if (prevIndex < 0) {
+                    prevIndex = images.length - 1;
+                }
+                // 이전 이미지의 클래스를 추가
+                images[prevIndex].parentElement.classList.add("carousel-item");
+                // 활성화된 이미지의 인덱스를 업데이트
+                activeIndex = prevIndex;
+            });
+
+            // 다음 버튼을 누르면 현재 활성화된 이미지의 다음 이미지를 활성화
+            document.querySelector(".next-button").addEventListener("click", function () {
+                // 현재 활성화된 이미지의 클래스를 제거
+                images[activeIndex].parentElement.classList.remove("carousel-item");
+                // 다음 이미지의 인덱스를 구함
+                var nextIndex = activeIndex + 1;
+                // 인덱스가 범위를 벗어나면 첫 번째 이미지로 돌아감
+                if (nextIndex >= images.length) {
+                    nextIndex = 0;
+                }
+                // 다음 이미지의 클래스를 추가
+                images[nextIndex].parentElement.classList.add("carousel-item");
+                // 활성화된 이미지의 인덱스를 업데이트
+                activeIndex = nextIndex;
+            });
+        }
+    });
+
+    // line-heart를 클릭할 때 이벤트 처리
+    document.getElementById('line-heart').addEventListener('click', function() {
+        // 현재 사용자의 인증 상태를 확인하기 위해 서버로 요청을 보냄
+        fetch('/check-authentication')
+            .then(response => {
+                if (response.ok) {
+                    // 인증 상태가 확인되면 북마크를 토글하는 로직을 수행
+                    toggleBookmark();
+                } else {
+                    // 인증되지 않은 경우, 로그인을 유도하는 메시지 표시
+                    alert("로그인 후에 북마크를 저장할 수 있습니다.");
+                }
+            })
+            .catch(error => {
+                console.error('오류 발생:', error);
+                alert('인증 상태를 확인하는 도중 오류가 발생했습니다.');
+            });
+    });
+    // filled-heart를 클릭할 때 이벤트 처리
+    document.getElementById('filled-heart').addEventListener('click', function() {
+        // filled-heart 이미지 숨기고 line-heart 이미지 보이기
+        document.getElementById('filled-heart').style.display = 'none';
+        document.getElementById('line-heart').style.display = 'inline';
+    });
+
+    // document.getElementById('myBook').addEventListener('click', function() {
+    //     var des = this.getAttribute('data-desname');
+    //     toggleBookmark(des);
+    // });
+
+    function toggleBookmark(des) {
+
+        // 실제 목적이 이름을 URL에 포함시키기
+        const bmUrl = window.location.href;
+
+        // 서버로 전송할 데이터 준비
+        const requestData = {
+            bmUrl: bmUrl,
+            keyword: des // 이 부분은 서버에서 desName을 받아 desCode를 조회할 수 있도록..
+        };
+
+        fetch('/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(requestData),
+            credentials: 'include' // 쿠키를 포함시키기 위해 필요
+        })
+            .then(response => {
+                if(response.ok) {
+                    return response.text("북마크 성공!");
+                } else {
+                    throw new Error('북마크 토글 실패');
+                }
+            })
+            .then(data => {
+                console.log(data); // 성공 메시지 또는 서버 응답 처리
+                alert(data);
+            })
+            .catch(error => {
+                console.error('Error', error);
+                alert('북마크 토글 중 전송이 제대로 되지 않았습니다.');
+            })
+    }
+    // line-heart를 클릭할 때 이벤트 처리
+    document.getElementById('line-heart').addEventListener('click', function() {
+        // line-heart 이미지 숨기고 filled-heart 이미지 보이기
+        document.getElementById('line-heart').style.display = 'none';
+        document.getElementById('filled-heart').style.display = 'inline';
+
+        // filled-heart 이미지에 확대 효과 부여
+        document.getElementById('filled-heart').classList.add('expand-shrink');
+
+        // 애니메이션 종료 후에 확대 효과 제거
+        document.getElementById('filled-heart').addEventListener('animationend', function() {
+            document.getElementById('filled-heart').classList.remove('expand-shrink');
+        }, { once: true });
+    });
+
+    // filled-heart를 클릭할 때 이벤트 처리
+    document.getElementById('filled-heart').addEventListener('click', function() {
+        // filled-heart 이미지 숨기고 line-heart 이미지 보이기
+        document.getElementById('filled-heart').style.display = 'none';
+        document.getElementById('line-heart').style.display = 'inline';
+    });
+
+</script>
+</body>
+</html>

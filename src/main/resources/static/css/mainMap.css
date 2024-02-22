@@ -1,0 +1,240 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    font-family: 'Pretendard-Regular';
+}
+
+/* 스크롤바 설정*/
+#list-items::-webkit-scrollbar{
+    width: 10px;
+}
+
+.container {
+    display: flex;
+}
+
+/* 스크롤바 막대 설정*/
+#list-items::-webkit-scrollbar-thumb{
+    background-color: gainsboro;
+    /* 스크롤바 둥글게 설정    */
+    border-radius: 5px;
+    border-style: hidden;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.div-30 {
+    width: 30%;
+    height: 100%;
+    background-color: white;
+    float: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.div-70 {
+    width: 70%;
+    height: 100%;
+    /* 원하는 배경색으로 변경 가능 */
+    float: left;
+    z-index: 0;
+}
+
+
+.title-text {
+    font-size: small;
+}
+
+.category {
+    text-align: center;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+a {
+    display: inline-block;
+    width: 70px;
+    height: 25px;
+}
+
+#list-header {
+    text-align: center;
+    padding: 10px;
+    background-color: white;
+    z-index: 2;
+    display: flex;
+}
+
+.navbar-brand {
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 50px;
+}
+
+.form-control{
+    padding-left: 30px;
+    border-radius: 30px;
+    width: 60%;
+    height: 30px;
+}
+
+.search {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.btn {
+    border-radius: 10px;
+    float: inherit;
+    text-decoration: none;
+    color: white;
+    font-size: medium;
+    background: #2388FF;
+    box-shadow: 10px 4px 6px rgba(0,0,0,0.5);
+    vertical-align: middle;
+    text-align: center;
+}
+
+.btn-c {
+    border-radius: 40px;
+    background-color: #2388FF;
+    text-decoration: none;
+    justify-content: space-between;
+
+}
+
+.btn-text {
+    font-size: 15px;
+    text-align: center;
+    vertical-align: middle;
+    color: white;
+}
+
+.btn-text:hover {
+    color: black;
+}
+
+.button:hover {
+    background: linear-gradient(to bottom, darkblue, darkmagenta);
+}
+
+#list-items {
+    width: 100%;
+    height: 100%;
+    max-height: 443px;/* 원하는 높이로 조절하세요 */
+    overflow-y: auto;
+    flex: 1;
+}
+
+.card-body {
+    border-style: hidden;
+    border-width: 0 0 1px 0;
+    box-shadow: 0 4px 4px -4px lightslategray;
+    height: 80px;
+}
+
+li {
+    /* 각 항목에 상하좌우 10px의 패딩을 추가합니다. */
+    margin-top: 50px;
+}
+
+h1 {
+    color: #2388FF;
+    margin-left: 75px;
+    margin-top: 50px;
+}
+
+.title {
+    flex-grow: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+li {
+    display: flex;
+    padding: 3px;
+    margin-right: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#kakao-talk-channel-chat-button {
+    position: fixed;
+    bottom: 20px; /* Adjust this value as needed */
+    right: 20px; /* Adjust this value as needed */
+    margin-right: 10px;
+    z-index: 3;
+}
+
+.button {
+    display: inline-block;
+    padding: 0px 0px;
+    font-size: 11px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    position: fixed;
+    z-index: 3;
+    width: 60px; /* 버튼 가로 크기 조절 */
+    height: 40px; /* 버튼 세로 크기 조절 */
+}
+
+.login-button {
+    background-color: #FFB023;
+    color: white;
+    position: fixed;
+    top: 0px; /* Adjust this value as needed */
+    right: 0px; /* Adjust this value as needed */
+    margin-right: 10px;
+    z-index: 3;
+}
+
+.support-button {
+    background-color: #FFB023;
+    color: white;
+    position: fixed;
+    top: 0px; /* Adjust this value as needed */
+    right: 80px; /* Adjust this value as needed */
+    margin-right: 0px;
+    z-index: 3;
+}
+
+#coordList {
+    list-style: none; /* 기본 리스트 마커 제거 */
+    padding: 0; /* 내부 간격 제거 */
+    margin: 0; /* 외부 간격 제거 */
+}
+
+#coordList li {
+    height: 80px; /* 각 리스트 아이템의 높이 설정 */
+    margin: 1px; /* 각 리스트 아이템 간격 설정 */
+    border-bottom: 1px solid #ddd; /* 테두리 추가 (선택 사항) */
+    box-sizing: border-box; /* 테두리 포함된 크기로 설정 */
+}
+
+#coordList li img {
+    height: 100%; /* 이미지가 부모 높이에 꽉 차게 설정 */
+    width: 150px; /* 가로 크기 자동 조절 */
+}
+
+#coordList li .title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 0px;
+}

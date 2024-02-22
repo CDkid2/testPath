@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/myAsk.css">
+    <title>Pathport</title>
+    <title>Title</title>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <form class="form-inline my-2 my-lg-0">
+            <a href="/">
+                <img th:src="@{/img/pp로고.png}" alt="" style="width: 150px; margin-top: 15px; margin-left: 50px;">
+            </a>
+            <div class="search">
+                <input type="text" placeholder="검색">
+                <a href="#" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></a>
+            </div>
+        </form>
+        <!-- 오른쪽 링크들 -->
+        <ul class="navbar-nav ml-auto" id="my-login-align">
+            <li class="nav-item">
+                <a class="nav-link" href="/aboutus/aboutus">고객 지원</a>
+            </li>
+            <!-- 로그인 상태인 경우 프로필 이미지와 드롭다운 메뉴 표시 -->
+            <li class="nav-item dropdown" th:if="${user != null}" > <!---->
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="https://image.idus.com/image/files/ddd9ac8dd08343f1819fb9aecd5676fe_1440.jpg" alt="프로필 이미지"
+                         class="profile-image" style="width: 30px; border-radius: 70%;"
+                    >
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/mypage">마이페이지</a>
+                    <a class="dropdown-item" href="/logout">로그아웃</a>
+                </div>
+            </li>
+
+            <!-- 로그인 상태가 아닌 경우 로그인 링크 표시 -->
+            <li class="nav-item" th:if="${user == null}"> <!---->
+                <a class="nav-link" href="/login">로그인</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<div class="category">
+    <form action="mypage" method="post">
+        <img th:name="user" th:src="${user.getProfileImg()}" alt="profile image" style="width: 150px" id="showFormLink">
+        <br><br>
+        <input style="text-align: center" type="text" name="nn" class="info-control" th:name="user" th:value="${ user.getNn() }" disabled>
+    </form>
+    <ul class="category-list">
+        <li class="category-element">
+            <a href="/aboutus/insertBoard" class="nav-link" id="writeReviewLink"><i class="fa-solid fa-pen-nib"></i> 후기 작성하기</a>
+        </li>
+        <li class="category-element">
+            <a href="/mypage/myAsk"  class="nav-link" id="supportLink"><i class="fa-solid fa-circle-question"></i> 내 문의</a>
+        </li>
+    </ul>
+</div>
+
+<section>
+    <div id="supportForm" class="container text-center">
+        <table class="table table-bordered support-table">
+            <thead class="text-center text-white">
+            <th class="col-1 text-center">글번호</th>
+            <th class="col-6">제목</th>
+            <th class="col-1 text-center">등록일</th>
+            </thead>
+            <tbody>
+            <p hidden="hidden" th:text="${session.user.getId()}"></p>
+            <tr th:each="board : ${boardList}">
+                <td th:text="${board.sup_code}"></td>
+                <td>
+                    <!-- 사용자 역할이 'user'인 경우 -->
+                    <a th:if="${user.role == 'user'}"
+                       th:href="@{/user/answer/{supCode}(supCode=${board.sup_code})}"
+                       th:text="${board.supTitle}">
+                    </a>
+                    <!-- 사용자 역할이 'admin'인 경우 -->
+                    <a th:unless="${user.role == 'user'}"
+                       th:href="@{/admin/answer/{supCode}(supCode=${board.sup_code})}"
+                       th:text="${board.supTitle}">
+                    </a>
+                </td>
+                <td th:text="${#dates.format(board.supDate, 'yyyy-MM-dd')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div id="kakao-talk-channel-chat-button" data-channel-public-id="_rBEwG" data-title="consult" data-size="small" data-color="yellow" data-shape="pc" data-support-multiple-densities="true"></div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/486cbabb0b.js" crossorigin="anonymous"></script>
+<!--<script src="js/mypage.js"></script>-->
+<script>
+    window.kakaoAsyncInit = function() {
+        Kakao.Channel.createChatButton({
+            container: '#kakao-talk-channel-chat-button',
+        });
+    };
+
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.channel.min.js';
+        js.integrity = 'sha384-ty4605mXDCz/lA+RRt4bHCRa1c9uIaIi0JrsmmWVxaNJZzu58jMhJK8wAMqDxrYv';
+        js.crossOrigin = 'anonymous';
+        fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'kakao-js-sdk');
+</script>
+</body>
+</html>

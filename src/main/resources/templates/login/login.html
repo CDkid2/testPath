@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="container">
+        <div class="sign-up-container">
+            <form action="" method="post" name="joinForm">
+                <h2>계정 생성하기</h2>
+
+                <div class="sign-up-content">
+                    <input id="mail" type="text" name="userEmail" placeholder="이메일">
+                    <button id="mail-btn">인증하기</button>
+
+                    <input type="password" id="password" name="password" placeholder="비밀번호">
+                    <div class="strongPassword-message hide">8글자 이상, 영문, 숫자, 특수문자($!%*#?&)를 사용하세요.</div>
+
+                    <input type="password" id="password-retype" placeholder="비밀번호 확인">
+                    <div class="mismatch-message hide">비밀번호가 일치하지 않습니다.</div>
+
+                    <input type="text" name="name" placeholder="이름">
+                    <input id="nick-name" name="nn" type="text" placeholder="닉네임">
+                    <button id="nick-name-btn" onclick="checkNickname()">중복확인</button>
+
+                    <div class="gender-content">
+                        <input id="g_male" type="radio" name="gender" value="male">
+                        <label for="g_male">남자</label>
+                        <input id="g_female" type="radio" name="gender" value="female">
+                        <label for="g_female">여자</label>
+                    </div>
+
+                    <input type="text" name="birth" placeholder="생년월일 ex) 901205">
+                </div>
+
+                <button class="form_btn">이메일 회원가입</button>
+
+            </form>
+        </div>
+        <div class="sign-in-container">
+            <form action="/loginProc" method="post" name="loginForm" id="loginForm">
+                <div id="logo">
+                    <img th:src="@{/img/pp로고.png}" alt="로고" width="120" height="80" />
+                </div>
+                <div class="social-links">
+                    <div>
+                        <a th:href="@{http://localhost:8088/login/oauth2/code/google}"><img th:src="@{/img/google.png}" alt="구글계정 로그인" width="25" height="25"/></a>
+                    </div>
+                    <div>
+                        <a th:href="@{http://localhost:8088/login/oauth2/code/kakao}"><img th:src="@{/img/kakao.png}" alt="카카오계정 로그인" width="25" height="25"/></a>
+                    </div>
+                    <div>
+                        <a th:href="@{http://localhost:8088/login/oauth2/code/naver}"><img th:src="@{/img/naver.png}" alt="네이버계정 로그인" width="25" height="25"/></a>
+                    </div>
+                </div>
+                <span>또는 이메일로 시작하기</span>
+                <input type="text" name="userEmail" placeholder="이메일">
+                <div class="password-container">
+                    <div>
+                        <input type="password" name="pwd" placeholder="비밀번호">
+                    </div>
+
+                    <div>
+                        <button type="button" id="togglePasswordBtn" class="password-toggle-btn" value="login">&#x1F441;</button>
+                    </div>
+                </div>
+                <div id="forgot-password-link">
+                    <input type="checkbox" id="login-keep" name="remember">
+                    <label for="login-keep">로그인 유지</label>
+                    <a th:href="@{/findPassword}">비밀번호 찾기</a>
+                </div>
+
+                <button type="submit" class="form_btn">이메일 로그인</button>
+                <p class="tos">계속 진행할 경우, pathport의 이용약관에 동의한 것으로 간주됩니다.</p>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay-left">
+                <div class="overlay-left-text">
+                    <h2>계정을 생성하셨나요?</h2>
+                    <p>로그인하여 pathport와 함께해보세요.</p>
+                </div>
+                <button id="signIn" class="overlay_btn">로그인</button>
+                <p class="tos">계속 진행할 경우, pathport의 이용약관에 동의한 것으로 간주됩니다.</p>
+            </div>
+            <div class="overlay-right">
+                <h2>아직 계정을 생성하지 않으셨나요?</h2>
+                <p>pathport와 함께 행복한 여행을 시작해보세요.</p>
+                <button id="signUp" class="overlay_btn">이메일 회원가입</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/login.js"></script>
+
+<script>
+    // 현재 페이지의 URL을 localStorage에 저장합니다.
+    localStorage.setItem('previousPage', window.location.href);
+
+    // 이전 페이지의 URL을 가져옵니다.
+
+</script>
+</body>
+</html>

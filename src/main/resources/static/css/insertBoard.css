@@ -1,0 +1,138 @@
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard-Regular';
+}
+
+/* 스크롤바 설정*/
+*::-webkit-scrollbar{
+    width: 10px;
+}
+
+/* 스크롤바 막대 설정*/
+*::-webkit-scrollbar-thumb{
+    background-color: gainsboro;
+    /* 스크롤바 둥글게 설정    */
+    border-radius: 10px;
+    border-style: hidden;
+}
+
+/* 스크롤바 뒷 배경 설정*/
+*::-webkit-scrollbar-track{
+    background-color: rgba(0,0,0,0);
+}
+
+
+.nav-link {
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    color: #2D2F33;
+    font-weight: bold;
+}
+
+.nav-link:hover {
+    color: #FFB023;
+}
+
+.nav-link:focus {
+    background: ghostwhite;
+    box-shadow: -2px -2px 5px white, 2px 2px 5px lightgray;
+    border-radius: 10px;
+    color: #FFC865;
+}
+
+header {
+    padding-bottom: 5px;
+    border-style: hidden;
+    border-width: 0 0 1px 0;
+    box-shadow: 0 4px 4px -4px lightgray;
+}
+
+section {
+    margin-top: 40px;
+    margin-left: 550px;
+    width: 1100px;
+    height: 700px;
+}
+
+.modal-body {
+    justify-content: center;
+}
+
+.navbar {
+    margin-left: 200px;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-nav {
+    margin-right: 200px;
+    margin-top: 15px;
+}
+
+.pass input {
+    width: 100%;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.review-content-footer input {
+    background: #618CC9;
+    color: white;
+    border-style: none;
+    width: 80px;
+    height: 35px;
+    border-radius: 10px
+}
+
+.input-group {
+    width: 100%;
+}
+
+.input-group-text {
+    background: #9ECBFF;
+}
+
+.input-group-text i {
+    color: white;
+}
+
+textarea {
+    width: 1000px;
+    height: 450px;
+    border-color: #3976CC;
+    border-radius: 10px;
+    border-width: 1px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: auto;
+    background-color: #f1f1f1; /* Adjust the background color as needed */
+    padding: 10px;
+    color: lightslategray;
+}
+
+.footer-info {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 12px;
+}
